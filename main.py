@@ -1,20 +1,44 @@
 import tkinter as tk
 
 
+def start_exploring():
+    print("Start button clicked!")
+
+
 def main():
     root = tk.Tk()
 
     root.title("Algorithm Playground")
-
     root.geometry("900x600")
+    root.configure(bg="white")
 
-    welcome_label = tk.Label(
+    title_label = tk.Label(
         root,
-        text="Welcome to Algorithm Playground!",
-        font=("Arial", 18)
+        text="Algorithm Playground",
+        font=("Arial", 28, "bold"),
+        bg="white"
     )
 
-    welcome_label.pack(pady=40)
+    title_label.pack(pady=(50, 15))
+
+    description_label = tk.Label(
+        root,
+        text="Learn algorithms through interactive visualizations.",
+        font=("Arial", 14),
+        bg="white"
+    )
+
+    description_label.pack()
+
+    start_button = tk.Button(
+        root,
+        text="Start Exploring",
+        font=("Arial", 14),
+        width=20,
+        command=start_exploring
+    )
+
+    start_button.pack(pady=40)
 
     root.mainloop()
 
