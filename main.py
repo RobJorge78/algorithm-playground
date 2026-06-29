@@ -1,8 +1,6 @@
 import tkinter as tk
 
-
-def start_exploring():
-    print("Start button clicked!")
+from ui.home_screen import show_home_screen
 
 
 def main():
@@ -35,7 +33,7 @@ def main():
         text="Start Exploring",
         font=("Arial", 14),
         width=20,
-        command=start_exploring
+        command=lambda: show_home_screen(root)
     )
 
     start_button.pack(pady=40)
