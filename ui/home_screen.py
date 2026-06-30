@@ -1,7 +1,10 @@
 import tkinter as tk
 
+from ui.binary_search_screen import show_binary_search_screen
+
 
 def show_home_screen(root):
+    # Remove everything currently on the screen
     for widget in root.winfo_children():
         widget.destroy()
 
@@ -18,7 +21,8 @@ def show_home_screen(root):
         root,
         text="Binary Search",
         width=25,
-        height=2
+        height=2,
+        command=lambda: show_binary_search_screen(root)
     )
 
     binary_button.pack(pady=10)
