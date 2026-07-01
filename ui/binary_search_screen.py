@@ -1,8 +1,29 @@
 import tkinter as tk
 
 
+numbers = [2, 5, 8, 11, 15, 20, 27]
+
+
+def binary_search(arr, target):
+    left = 0
+    right = len(arr) - 1
+
+    while left <= right:
+        middle = (left + right) // 2
+
+        if arr[middle] == target:
+            return middle
+
+        elif arr[middle] < target:
+            left = middle + 1
+
+        else:
+            right = middle - 1
+
+    return -1
+
+
 def show_binary_search_screen(root):
-    # Remove everything currently on the screen
     for widget in root.winfo_children():
         widget.destroy()
 
@@ -13,18 +34,25 @@ def show_binary_search_screen(root):
         bg="white"
     )
 
-    title.pack(pady=25)
+    title.pack(pady=20)
 
-    info = tk.Label(
+    instruction = tk.Label(
         root,
-        text="Today's goal: build the Binary Search visualizer.",
+        text="Enter a number to search for:",
         font=("Arial", 14),
         bg="white"
     )
 
-    info.pack(pady=10)
+    instruction.pack()
 
-    numbers = [2, 5, 8, 11, 15, 20, 27]
+    entry = tk.Entry(
+        root,
+        font=("Arial", 14),
+        justify="center",
+        width=10
+    )
+
+    entry.pack(pady=10)
 
     numbers_label = tk.Label(
         root,
@@ -33,7 +61,46 @@ def show_binary_search_screen(root):
         bg="white"
     )
 
-    numbers_label.pack(pady=40)
+    numbers_label.pack(pady=25)
+
+    result_label = tk.Label(
+        root,
+        text="",
+        font=("Arial", 14),
+        bg="white"
+    )
+
+    result_label.pack(pady=15)
+
+    def start_search():
+        value = entry.get()
+
+        try:
+            target = int(value)
+
+        except ValueError:
+            result_label.config(text="Please enter a valid integer.")
+            return
+
+        index = binary_search(numbers, target)
+
+        if index == -1:
+            result_label.config(
+                text=f"{target} was not found."
+            )
+        else:
+            result_label.config(
+                text=f"{target} found at index {index}."
+            )
+
+    search_button = tk.Button(
+        root,
+        text="Start Search",
+        width=20,
+        command=start_search
+    )
+
+    search_button.pack(pady=10)
 
     def go_back():
         from ui.home_screen import show_home_screen
@@ -42,7 +109,7 @@ def show_binary_search_screen(root):
     back_button = tk.Button(
         root,
         text="Back",
-        width=15,
+        width=20,
         command=go_back
     )
 
