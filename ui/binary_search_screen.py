@@ -4,23 +4,35 @@ import tkinter as tk
 numbers = [2, 5, 8, 11, 15, 20, 27]
 
 
-def binary_search(arr, target):
+def generate_binary_search_steps(arr, target):
+    steps = []
     left = 0
     right = len(arr) - 1
 
     while left <= right:
         middle = (left + right) // 2
+        middle_value = arr[middle]
 
-        if arr[middle] == target:
-            return middle
+        if middle_value == target:
+            steps.append(
+                f"Middle index is {middle}. Value {middle_value} equals target {target}. Target found!"
+            )
+            return steps
 
-        elif arr[middle] < target:
+        elif middle_value < target:
+            steps.append(
+                f"Middle index is {middle}. Value {middle_value} is less than {target}. Search the right half."
+            )
             left = middle + 1
 
         else:
+            steps.append(
+                f"Middle index is {middle}. Value {middle_value} is greater than {target}. Search the left half."
+            )
             right = middle - 1
 
-    return -1
+    steps.append(f"Target {target} was not found.")
+    return steps
 
 
 def show_binary_search_screen(root):
@@ -33,7 +45,6 @@ def show_binary_search_screen(root):
         font=("Arial", 24, "bold"),
         bg="white"
     )
-
     title.pack(pady=20)
 
     instruction = tk.Label(
@@ -42,7 +53,6 @@ def show_binary_search_screen(root):
         font=("Arial", 14),
         bg="white"
     )
-
     instruction.pack()
 
     entry = tk.Entry(
@@ -51,47 +61,55 @@ def show_binary_search_screen(root):
         justify="center",
         width=10
     )
-
     entry.pack(pady=10)
 
     numbers_label = tk.Label(
         root,
-        text="   ".join(str(num) for num in numbers),
-        font=("Consolas", 20),
+        text="Numbers: " + "   ".join(str(num) for num in numbers),
+        font=("Consolas", 18),
         bg="white"
     )
-
     numbers_label.pack(pady=25)
 
-    result_label = tk.Label(
+    step_label = tk.Label(
         root,
         text="",
         font=("Arial", 14),
-        bg="white"
+        bg="white",
+        wraplength=700,
+        justify="center"
     )
+    step_label.pack(pady=20)
 
-    result_label.pack(pady=15)
+    state = {
+        "steps": [],
+        "current_step": 0
+    }
 
     def start_search():
         value = entry.get()
 
         try:
             target = int(value)
-
         except ValueError:
-            result_label.config(text="Please enter a valid integer.")
+            step_label.config(text="Please enter a valid integer.")
             return
 
-        index = binary_search(numbers, target)
+        state["steps"] = generate_binary_search_steps(numbers, target)
+        state["current_step"] = 0
 
-        if index == -1:
-            result_label.config(
-                text=f"{target} was not found."
-            )
+        step_label.config(text=state["steps"][0])
+
+    def next_step():
+        if not state["steps"]:
+            step_label.config(text="Start a search first.")
+            return
+
+        if state["current_step"] < len(state["steps"]) - 1:
+            state["current_step"] += 1
+            step_label.config(text=state["steps"][state["current_step"]])
         else:
-            result_label.config(
-                text=f"{target} found at index {index}."
-            )
+            step_label.config(text="Search complete.")
 
     search_button = tk.Button(
         root,
@@ -99,8 +117,15 @@ def show_binary_search_screen(root):
         width=20,
         command=start_search
     )
+    search_button.pack(pady=5)
 
-    search_button.pack(pady=10)
+    next_button = tk.Button(
+        root,
+        text="Next Step",
+        width=20,
+        command=next_step
+    )
+    next_button.pack(pady=5)
 
     def go_back():
         from ui.home_screen import show_home_screen
@@ -112,5 +137,4 @@ def show_binary_search_screen(root):
         width=20,
         command=go_back
     )
-
     back_button.pack(pady=20)
